@@ -1,14 +1,14 @@
 podTemplate(label: 'golang-pod',  containers: [
     containerTemplate(
             name: 'golang',
-            image: 'registry.cn-hangzhou.aliyuncs.com/spacexnice/golang:1.8.3-docker',
+            image: 'golang:1.12.13-stretch',
             ttyEnabled: true,
             command: 'cat',
             envVars: [envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
     ),
     containerTemplate(
             name: 'jnlp',
-            image: 'openshift/jenkins-slave-base-centos7:v3.9',
+            image: 'jenkins/jnlp-slave',
             args: '${computer.jnlpmac} ${computer.name}',
             command: '',
             envVars: [envVar(key: 'GO15VENDOREXPERIMENT', value: '1'),envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
@@ -16,7 +16,7 @@ podTemplate(label: 'golang-pod',  containers: [
   ]
   ,volumes: [
         /*persistentVolumeClaim(mountPath: '/home/jenkins', claimName: 'jenkins', readOnly: false),*/
-        hostPathVolume(hostPath: '/root/work/jenkins', mountPath: '/home/jenkins'),
+        hostPathVolume(hostPath: '/minikube/jenkins/jenkins2', mountPath: '/home/jenkins'),
         hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
         hostPathVolume(hostPath: '/tmp/', mountPath: '/tmp/'),
 ])
