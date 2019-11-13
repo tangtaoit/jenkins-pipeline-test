@@ -4,14 +4,14 @@ podTemplate(label: 'golang-pod',  containers: [
             image: 'registry.cn-hangzhou.aliyuncs.com/spacexnice/golang:1.8.3-docker',
             ttyEnabled: true,
             command: 'cat',
-            envVars: [containerEnvVar(key:'BUILD_ID',value:"${BUILD_ID}")]
+            envVars: [envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
     ),
     containerTemplate(
             name: 'jnlp',
             image: 'openshift/jenkins-slave-base-centos7:v3.9',
             args: '${computer.jnlpmac} ${computer.name}',
             command: '',
-            envVars: [containerEnvVar(key: 'GO15VENDOREXPERIMENT', value: '1'),containerEnvVar(key:'BUILD_ID',value:"${BUILD_ID}")]
+            envVars: [envVar(key: 'GO15VENDOREXPERIMENT', value: '1'),envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
         )
   ]
   ,volumes: [
