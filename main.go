@@ -9,5 +9,5 @@ func main()  {
 			"message": "pong",
 		})
 	})
-	r.Run() // liste
+	r.Run(":8080") // liste
 }

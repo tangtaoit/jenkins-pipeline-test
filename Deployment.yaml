@@ -1,0 +1,54 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: jenkins-pipeline-test
+    component: bwit
+  name: jenkins-pipeline-test
+  namespace: kube-ops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-pipeline-test
+      component: bwit
+  template:
+    metadata:
+      labels:
+        app: jenkins-pipeline-test
+        component: bwit
+    spec:
+      containers:
+      - name: jenkins-pipeline-test
+        image: github.com/pipeline-test/jenkins-pipeline-test
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: jenkins-pipeline-test
+    component: bwit
+  annotations:
+    cname: "测试pipeline"
+    ismodule: "true"
+    rbac: "true"
+  name: jenkins-pipeline-test
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: tcp-8080
+  selector:
+    app: jenkins-pipeline-test
+    component: bwit
