@@ -23,21 +23,13 @@ podTemplate(label: 'golang-pod',  containers: [
 {
     node ('golang-pod') {
         def PROJECT_NAME = "${JOB_NAME}"
-        def HUB_BASE_URL = "hub2.qiyunxin.com"
-        def HUB_BRANCH_NAME = "znsmj"
+        def HUB_BASE_URL = "github.com"
+        def HUB_BRANCH_NAME = "pipeline-test"
         def deploymentPath = "Deployment.yaml"
-         def deploymentMongodbPath = "Deployment_Mongodb.yaml"
         container('golang') {
            checkout scm
             stage('构建镜像') {
               sh("docker build -t ${HUB_BASE_URL}/${HUB_BRANCH_NAME}/${PROJECT_NAME}:${BUILD_ID} .")
-            }
-            stage('推送镜像到仓库') {
-              if ("${PUSH}"=='true') {
-                withDockerRegistry([credentialsId:'docker_register',url:"https://${HUB_BASE_URL}/"]) {
-                  sh("docker push ${HUB_BASE_URL}/${HUB_BRANCH_NAME}/${PROJECT_NAME}:${BUILD_ID}")
-                }
-              }
             }
         }
          container('jnlp') {
@@ -45,11 +37,8 @@ podTemplate(label: 'golang-pod',  containers: [
                if (fileExists("${deploymentPath}")) {
                  sh("kubectl apply -f ${deploymentPath} --overwrite=true")
                }
-               if (fileExists("${deploymentMongodbPath}")) {
-                 sh("kubectl apply -f ${deploymentMongodbPath} --overwrite=true")
-               }
-               sh("oc set image deployment/${PROJECT_NAME} ${PROJECT_NAME}=${HUB_BASE_URL}/${HUB_BRANCH_NAME}/${PROJECT_NAME}:${BUILD_ID} -n qiyunxin")
-               sh("oc rollout status deployment/${PROJECT_NAME} -n qiyunxin")
+               sh("kubectl set image deployment/${PROJECT_NAME} ${PROJECT_NAME}=${HUB_BASE_URL}/${HUB_BRANCH_NAME}/${PROJECT_NAME}:${BUILD_ID} -n kube-ops")
+               sh("kubectl rollout status deployment/${PROJECT_NAME} -n kube-ops")
             }
          }
     }
