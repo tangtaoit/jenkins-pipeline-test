@@ -1,14 +1,14 @@
 podTemplate(label: 'golang-pod',  containers: [
     containerTemplate(
             name: 'golang',
-            image: 'golang:1.12.13-stretch',
+            image: 'creack/golang-dcind:latest',
             ttyEnabled: true,
             command: 'cat',
             envVars: [envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
     ),
     containerTemplate(
             name: 'jnlp',
-            image: 'jenkins/jnlp-slave',
+            image: 'openshift/jenkins-slave-base-centos7:v3.9',
             args: '${computer.jnlpmac} ${computer.name}',
             command: '',
             envVars: [envVar(key: 'GO15VENDOREXPERIMENT', value: '1'),envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
