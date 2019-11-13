@@ -18,6 +18,7 @@ spec:
         app: jenkins-pipeline-test
         component: bwit
     spec:
+      serviceAccount: jenkins2
       containers:
       - name: jenkins-pipeline-test
         image: github.com/pipeline-test/jenkins-pipeline-test
