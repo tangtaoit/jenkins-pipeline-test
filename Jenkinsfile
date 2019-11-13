@@ -34,9 +34,9 @@ podTemplate(label: 'golang-pod',  containers: [
         }
          container('jnlp') {
             stage('部署镜像' ) {
-               if (fileExists("${deploymentPath}")) {
+             /*  if (fileExists("${deploymentPath}")) {
                  sh("kubectl apply -f ${deploymentPath} --overwrite=true")
-               }
+               } */
                sh("kubectl set image deployment/${PROJECT_NAME} ${PROJECT_NAME}=${HUB_BASE_URL}/${HUB_BRANCH_NAME}/${PROJECT_NAME}:${BUILD_ID} -n kube-ops")
                sh("kubectl rollout status deployment/${PROJECT_NAME} -n kube-ops")
             }
