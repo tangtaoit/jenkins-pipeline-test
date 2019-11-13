@@ -8,7 +8,7 @@ podTemplate(label: 'golang-pod',  containers: [
     ),
     containerTemplate(
             name: 'jnlp',
-            image: 'openshift/jenkins-slave-base-centos7:v3.9',
+            image: 'openshift/jenkins-slave-base-centos7:v3.11',
             args: '${computer.jnlpmac} ${computer.name}',
             command: '',
             envVars: [envVar(key: 'GO15VENDOREXPERIMENT', value: '1'),envVar(key:'BUILD_ID',value:"${BUILD_ID}")]
